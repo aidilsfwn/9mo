@@ -9,7 +9,7 @@ import {
 
 import { db } from "@/lib/firebase";
 
-interface KickEntry {
+export interface KickEntry {
   id: string;
   timestamp: string;
   date: string;
@@ -36,7 +36,7 @@ export const useKicks = () => {
 
         kicksData.sort(
           (a, b) =>
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
         );
 
         setKicks(kicksData);
@@ -45,7 +45,7 @@ export const useKicks = () => {
       (error) => {
         console.error("Error loading kicks:", error);
         setLoading(false);
-      }
+      },
     );
 
     return () => unsubscribe();

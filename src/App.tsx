@@ -53,7 +53,7 @@ const App = () => {
         if (kickCount >= 10) {
           const sortedKicks = [...dateKicks].sort(
             (a, b) =>
-              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+              new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
           );
 
           const firstKick = new Date(sortedKicks[0].timestamp);
@@ -78,28 +78,50 @@ const App = () => {
 
   const dailySummaries = getDailySummaries();
 
-  const getTimeTo10Kicks = () => {
+  const getTodayKickTimes = () => {
     const todayKicks = kicks.filter((k) => k.date === getTodayDate());
-    if (todayKicks.length < 10) return null;
+    if (todayKicks.length === 0)
+      return { firstKick: null, tenthKick: null, timeTo10: null };
 
-    const sortedKicks = todayKicks.sort(
+    const sortedKicks = [...todayKicks].sort(
       (a, b) =>
-        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
     );
 
-    const firstKick = new Date(sortedKicks[0].timestamp);
-    const tenthKick = new Date(sortedKicks[9].timestamp);
+    const firstKick = sortedKicks[0]
+      ? new Date(sortedKicks[0].timestamp)
+      : null;
+    const tenthKick = sortedKicks[9]
+      ? new Date(sortedKicks[9].timestamp)
+      : null;
 
-    const diffMs = tenthKick.getTime() - firstKick.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-
-    if (diffMins < 60) {
-      return `${diffMins}m`;
-    } else {
-      const hours = Math.floor(diffMins / 60);
-      const mins = diffMins % 60;
-      return `${hours}h ${mins}m`;
+    let timeTo10 = null;
+    if (firstKick && tenthKick) {
+      const diffMs = tenthKick.getTime() - firstKick.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      if (diffMins < 60) {
+        timeTo10 = `${diffMins}m`;
+      } else {
+        const hours = Math.floor(diffMins / 60);
+        const mins = diffMins % 60;
+        timeTo10 = `${hours}h ${mins}m`;
+      }
     }
+    return {
+      firstKick: firstKick
+        ? firstKick.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : null,
+      tenthKick: tenthKick
+        ? tenthKick.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : null,
+      timeTo10,
+    };
   };
 
   const handleLogKick = async () => {
@@ -139,7 +161,7 @@ const App = () => {
   if (appLoading) return <Loading />;
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center overflow-hidden">
+    <div className="bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center overflow-hidden">
       <div className="w-full space-y-4">
         <div className="bg-white flex flex-col px-6 md:px-8 py-4 shadow-sm">
           <div className="flex flex-row gap-4 items-center">
@@ -156,9 +178,13 @@ const App = () => {
           </div>
         </div>
         <div className="flex flex-col px-6 md:px-8 py-4 gap-6">
-          <div className="flex flex-col gap-1.5">
-            <h1 className="text-3xl font-bold">Hi Farhana 👋</h1>
-            <p className="text-gray-600 text-sm">Track your baby's kicks</p>
+          <div className="flex flex-col gap-1.5 items-center">
+            <h1 className="text-2xl font-bold text-center">
+              Hi <span className="text-[#ff78ae]">Farhana</span>,
+            </h1>
+            <p className="text-gray-600 text-sm text-center">
+              Track your baby's kicks
+            </p>
           </div>
           <Card className="shadow-md border-0">
             <CardContent>
@@ -178,33 +204,69 @@ const App = () => {
               </div>
               <Separator className="my-6" />
               <div className="flex flex-col gap-4">
-                <div className="flex flex-row justify-center gap-2">
+                <div className="flex flex-row justify-center gap-2 mb-2">
                   <div className="p-1.5 bg-purple-100 rounded">
                     <Calendar className="w-3 h-3 text-purple-600" />
                   </div>
                   <div className="font-semibold">Today's Stats</div>
                 </div>
-                <div className="flex flex-row gap-2">
-                  <div className="flex flex-1 flex-col gap-2 text-center">
-                    <div>Kicks </div>
-                    {loading ? (
-                      <Skeleton className="h-8 w-10 rounded self-center" />
-                    ) : (
-                      <div className="text-3xl font-bold text-purple-600">
-                        {kicksToday}
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+                  <Card className="shadow-sm border-0">
+                    <CardContent className="flex flex-col items-center py-4">
+                      <div className="text-xs font-medium text-gray-500 mb-1">
+                        Kicks
                       </div>
-                    )}
-                  </div>
-                  <div className="flex flex-1 flex-col gap-2 text-center">
-                    <div>Time to 10</div>
-                    {loading ? (
-                      <Skeleton className="h-8 w-10 rounded self-center" />
-                    ) : (
-                      <div className="text-3xl font-bold text-blue-600">
-                        {getTimeTo10Kicks() || "-"}
+                      {loading ? (
+                        <Skeleton className="h-8 w-10 rounded self-center" />
+                      ) : (
+                        <div className="text-3xl font-bold text-purple-600">
+                          {kicksToday}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  <Card className="shadow-sm border-0">
+                    <CardContent className="flex flex-col items-center py-4">
+                      <div className="text-xs font-medium text-gray-500 mb-1">
+                        Time to 10
                       </div>
-                    )}
-                  </div>
+                      {loading ? (
+                        <Skeleton className="h-8 w-10 rounded self-center" />
+                      ) : (
+                        <div className="text-2xl font-bold text-blue-600 text-center">
+                          {getTodayKickTimes().timeTo10 || "-"}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  <Card className="shadow-sm border-0">
+                    <CardContent className="flex flex-col items-center py-4">
+                      <div className="text-xs font-medium text-gray-500 mb-1">
+                        1st Kick
+                      </div>
+                      {loading ? (
+                        <Skeleton className="h-8 w-16 rounded self-center" />
+                      ) : (
+                        <div className="text-xl font-semibold text-green-600 text-center">
+                          {getTodayKickTimes().firstKick || "-"}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  <Card className="shadow-sm border-0">
+                    <CardContent className="flex flex-col items-center py-4">
+                      <div className="text-xs font-medium text-gray-500 mb-1">
+                        10th Kick
+                      </div>
+                      {loading ? (
+                        <Skeleton className="h-8 w-16 rounded self-center" />
+                      ) : (
+                        <div className="text-xl font-semibold text-orange-600 text-center">
+                          {getTodayKickTimes().tenthKick || "-"}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
                 <Button
                   className="max-w-sm w-full self-center mt-2"
@@ -219,7 +281,7 @@ const App = () => {
               <Separator className="my-6" />
               <div className="flex flex-col gap-3">
                 <div className="font-semibold">History</div>
-                <HistoryTable data={dailySummaries} />
+                <HistoryTable data={dailySummaries} kicks={kicks} />
               </div>
             </CardContent>
           </Card>
