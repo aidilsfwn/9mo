@@ -83,7 +83,7 @@ export const HistoryTable = ({ data, kicks }: HistoryTableProps) => {
                 colSpan={5}
                 className="px-4 py-8 text-center text-gray-500"
               >
-                No kicks logged yet
+                No kicks yet — tap above to log your first
               </TableCell>
             </TableRow>
           ) : (

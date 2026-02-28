@@ -36,8 +36,8 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
 
   if (chartData.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-500">
-        Not enough data to display chart (need at least one day with 10+ kicks)
+      <div className="h-64 flex items-center justify-center px-4 text-center text-sm text-gray-500">
+        Log 10+ kicks in a day to see your time-to-10 trend
       </div>
     );
   }

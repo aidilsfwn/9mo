@@ -140,7 +140,7 @@ const App = () => {
               </div>
             </div>
           </header>
-          <main className="px-6 pb-4 pt-2">{renderContent()}</main>
+          <main className="px-6 pb-6 pt-4">{renderContent()}</main>
         </div>
       </div>
       <BottomNav activeTab={activeTab} onChange={setActiveTab} />

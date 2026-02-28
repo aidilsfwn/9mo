@@ -16,7 +16,7 @@ const tabs: { key: TabKey; label: string; Icon: React.ComponentType<any> }[] = [
 export const BottomNav = ({ activeTab, onChange }: BottomNavProps) => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-20 border-t bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-md items-center justify-between px-4 pb-[env(safe-area-inset-bottom)] pt-2">
+      <div className="mx-auto flex max-w-md items-center justify-between gap-1 px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2">
         {tabs.map(({ key, label, Icon }) => {
           const isActive = activeTab === key;
           return (

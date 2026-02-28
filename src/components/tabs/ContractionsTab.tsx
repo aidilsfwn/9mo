@@ -67,7 +67,7 @@ const getGuidance = (contractions: Contraction[]) => {
     return {
       level: "green" as const,
       title: "Keep tracking",
-      message: "Log a few contractions to see guidance based on the 5-1-1 rule.",
+      message: "Track a few contractions to see when it might be time to go in (5-1-1 rule).",
     };
   }
 
@@ -85,26 +85,26 @@ const getGuidance = (contractions: Contraction[]) => {
   if (durationOk && intervalSeconds < 5 * 60 && windowMinutes >= 60) {
     return {
       level: "red" as const,
-      title: "5-1-1 met — go now",
+      title: "5-1-1 rule — time to go",
       message:
-        "Contractions are less than 5 minutes apart, lasting more than 1 minute, and have been consistent for over an hour. It's time to go to the hospital or call your provider.",
+        "Contractions are less than 5 minutes apart, lasting over 1 minute, for more than an hour. Head to the hospital or call your provider.",
     };
   }
 
   if (intervalSeconds < 7 * 60) {
     return {
       level: "yellow" as const,
-      title: "Getting close",
+      title: "Getting closer",
       message:
-        "Contractions are getting closer together. Keep timing them and get ready to go when they reach the 5-1-1 pattern.",
+        "Contractions are spacing up. Keep timing them—when they hit 5-1-1 (5 min apart, 1 min long, 1 hour), it's time to go.",
     };
   }
 
   return {
     level: "green" as const,
     title: "Not yet",
-    message:
-      "Contractions are still spaced out. Keep tracking and follow your provider's advice for when to go in.",
+      message:
+        "Contractions are still spaced out. Keep tracking—your provider can advise when to head in.",
   };
 };
 
@@ -177,7 +177,7 @@ export const ContractionsTab = ({
       onChange(updated);
       setActiveId(null);
       setElapsed(0);
-      toast.success("Contraction recorded.");
+      toast.success("Recorded!");
     }
   };
 
@@ -185,7 +185,7 @@ export const ContractionsTab = ({
     onChange([]);
     setActiveId(null);
     setElapsed(0);
-    toast.success("Contraction history cleared.");
+      toast.success("History cleared");
   };
 
   const active = activeId
@@ -220,7 +220,7 @@ export const ContractionsTab = ({
         <CardContent className="space-y-4 pt-4">
           <div className="flex flex-col items-center gap-3">
             <div className="text-xs font-medium uppercase tracking-wide text-gray-500">
-              {active ? "Contraction in progress" : "Ready when you are"}
+              {active ? "Timing..." : "Tap when a contraction starts"}
             </div>
             <div className="text-4xl font-mono font-semibold text-purple-700">
               {formattedElapsed}
@@ -259,7 +259,7 @@ export const ContractionsTab = ({
             </div>
             <div className="rounded-lg bg-blue-50 px-2 py-3">
               <div className="mb-1 text-[11px] font-medium text-blue-600">
-                Avg Duration (last 5)
+                Avg Duration
               </div>
               <div className="text-sm font-semibold">
                 {formatSeconds(stats.avgDuration)}
@@ -267,7 +267,7 @@ export const ContractionsTab = ({
             </div>
             <div className="rounded-lg bg-blue-50 px-2 py-3">
               <div className="mb-1 text-[11px] font-medium text-blue-600">
-                Avg Interval (last 5)
+                Avg Interval
               </div>
               <div className="text-sm font-semibold">
                 {formatSeconds(stats.avgInterval)}
@@ -307,9 +307,9 @@ export const ContractionsTab = ({
 
           <div className="max-h-64 space-y-2 overflow-y-auto rounded-lg border bg-white px-3 py-2">
             {list.length === 0 ? (
-              <div className="py-6 text-center text-xs text-gray-500">
-                No contractions recorded yet.
-              </div>
+            <div className="py-6 text-center text-xs text-gray-500">
+              Tap Start when a contraction begins
+            </div>
             ) : (
               list.map((c) => (
                 <div

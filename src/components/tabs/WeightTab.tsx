@@ -112,22 +112,22 @@ export const WeightTab = ({
     e.preventDefault();
     const parsed = parseFloat(weightInput);
     if (Number.isNaN(parsed) || parsed <= 0) {
-      toast.error("Please enter a valid weight in kg.");
+      toast.error("Enter a valid weight (kg)");
       return;
     }
 
     if (!dateInput) {
-      toast.error("Please select a date.");
+      toast.error("Please pick a date");
       return;
     }
 
     setSubmitting(true);
     try {
       await onAddWeight(parsed, dateInput);
-      toast.success("Weight entry logged.");
+      toast.success("Weight logged!");
       setWeightInput("");
     } catch {
-      toast.error("Failed to log weight. Please try again.");
+      toast.error("Couldn't log weight. Try again?");
     } finally {
       setSubmitting(false);
     }
@@ -136,9 +136,9 @@ export const WeightTab = ({
   const handleRemove = async (id: string) => {
     try {
       await onRemoveWeight(id);
-      toast.success("Weight entry removed.");
+      toast.success("Entry removed");
     } catch {
-      toast.error("Failed to remove weight entry.");
+      toast.error("Couldn't remove entry");
     }
   };
 
@@ -151,7 +151,7 @@ export const WeightTab = ({
         <div>
           <h2 className="text-lg font-semibold">Weight Tracker</h2>
           <p className="text-xs text-gray-500">
-            Log your weight and see your progress over time.
+            Watch your progress as baby grows
           </p>
         </div>
       </div>
@@ -202,7 +202,7 @@ export const WeightTab = ({
             <Card className="shadow-sm border-0">
               <CardContent className="flex flex-col items-center py-3">
                 <div className="text-xs font-medium text-gray-500 mb-1">
-                  Current
+                  Current Weight
                 </div>
                 <div className="text-base font-semibold text-purple-700">
                   {formatKg(stats.currentWeight)}
@@ -243,13 +243,13 @@ export const WeightTab = ({
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Weight Trend</span>
               <span className="text-xs text-gray-500">
-                Last 3 entries: {trend}
+                Recent: {trend}
               </span>
             </div>
             <div className="h-56 rounded-lg border border-purple-100 bg-purple-50/40 p-2">
               {chartData.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-xs text-gray-500">
-                  Log a few entries to see your chart.
+                <div className="flex h-full items-center justify-center px-4 text-center text-xs text-gray-500">
+                  Add a few entries to see your progress
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
@@ -327,7 +327,7 @@ export const WeightTab = ({
                         colSpan={5}
                         className="py-6 text-center text-sm text-gray-500"
                       >
-                        No weight entries yet.
+                        No entries yet. Log your first weight above.
                       </TableCell>
                     </TableRow>
                   ) : (

@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { Calendar, Plus } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { toast } from "sonner";
 
-import { Card, CardContent, Button, Skeleton, Separator } from "@/components/ui";
+import { Card, CardContent, Skeleton, Separator } from "@/components/ui";
 import { HistoryChart, HistoryTable, LogButton } from "@/components";
 import type { KickEntry } from "@/hooks";
 import { calculateTimeInfo, startOfWeek } from "@/utils";
@@ -185,7 +185,7 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
           Hi <span className="text-[#ff78ae]">Farhana</span>,
         </h1>
         <p className="text-gray-600 text-sm text-center">
-          Track your baby's kicks
+          Feel those little kicks and track your patterns
         </p>
       </div>
 
@@ -250,7 +250,7 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
               <Card className="shadow-sm border-0">
                 <CardContent className="flex flex-col items-center py-4">
                   <div className="text-xs font-medium text-gray-500 mb-1">
-                    Most Active Hour
+                    Peak Hour
                   </div>
                   {logging ? (
                     <Skeleton className="h-8 w-16 rounded self-center" />
@@ -265,7 +265,7 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
               <Card className="shadow-sm border-0">
                 <CardContent className="flex flex-col items-center py-4">
                   <div className="text-xs font-medium text-gray-500 mb-1">
-                    Avg Daily Kicks
+                    Daily Average
                   </div>
                   {logging ? (
                     <Skeleton className="h-8 w-16 rounded self-center" />
@@ -308,17 +308,9 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
               </Card>
             </div>
 
-            <div className="flex flex-col items-center gap-3 mt-2">
+            <div className="flex flex-col items-center gap-2 mt-2">
               <LogButton onClick={handleLogKickClick} loading={logging} />
-              <Button
-                className="max-w-sm w-full self-center"
-                onClick={handleLogKickClick}
-                disabled={logging}
-                size="lg"
-              >
-                <Plus />
-                Log Kick
-              </Button>
+              <p className="text-xs text-gray-500">Tap to log a kick</p>
             </div>
           </div>
 

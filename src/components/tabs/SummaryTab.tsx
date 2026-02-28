@@ -78,7 +78,7 @@ const getContractionSummary = (contractions: Contraction[]) => {
     return {
       hasSession: false,
       text: "No active session",
-      detail: "Start tracking contractions when labor begins to see a summary here.",
+      detail: "When labor starts, use the Contractions tab to track. Your summary will appear here.",
     };
   }
 
@@ -93,7 +93,7 @@ const getContractionSummary = (contractions: Contraction[]) => {
   return {
     hasSession: true,
     text: `${count} contractions logged`,
-    detail: `Last session spanned about ${Math.round(durationMinutes)} minutes.`,
+      detail: `Session ~${Math.round(durationMinutes)} min`,
   };
 };
 
@@ -101,18 +101,18 @@ const getMotivationalMessage = () => {
   const { weeks } = calculateTimeInfo();
 
   if (weeks < 14) {
-    return "First trimester: tiny flutters, big changes. You're building something incredible—one day at a time.";
+    return "First trimester: tiny flutters, big changes. You're building something incredible — one day at a time.";
   }
 
   if (weeks < 28) {
-    return "Second trimester: your energy is returning and baby is growing strong. You're doing an amazing job.";
+    return "Second trimester: energy's returning and baby's growing strong. You're doing an amazing job.";
   }
 
   if (weeks < 37) {
-    return "Third trimester: you're in the home stretch. Rest when you can and trust your instincts—you know your baby best.";
+    return "Third trimester: home stretch. Rest when you can and trust your instincts — you know your baby best.";
   }
 
-  return "Any day now. Breathe, lean on your support system, and remember: you and baby are a powerful team.";
+  return "Any day now. Breathe, lean on your support, and remember: you and baby are a powerful team.";
 };
 
 export const SummaryTab = ({
@@ -136,7 +136,7 @@ export const SummaryTab = ({
         <div>
           <h2 className="text-lg font-semibold">Overview</h2>
           <p className="text-xs text-gray-500">
-            A quick snapshot of how you and baby are doing.
+            Everything at a glance
           </p>
         </div>
       </div>
@@ -168,7 +168,7 @@ export const SummaryTab = ({
                 {weeks}w{days > 0 ? ` + ${days}d` : ""} / 40w
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-purple-100">
+            <div className="h-2.5 overflow-hidden rounded-full bg-purple-100">
               <div
                 className="h-full rounded-full bg-linear-to-r from-pink-500 via-purple-500 to-blue-500"
                 style={{ width: `${progress * 100}%` }}
@@ -247,7 +247,7 @@ export const SummaryTab = ({
 
           <Separator />
 
-          <div className="rounded-lg bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 p-4 text-xs leading-relaxed text-gray-700">
+          <div className="rounded-lg bg-linear-to-br from-pink-50 via-purple-50 to-blue-50 p-4 text-sm leading-relaxed text-gray-700">
             {message}
           </div>
         </CardContent>
