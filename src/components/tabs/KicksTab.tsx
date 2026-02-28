@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import { Calendar, Baby } from "lucide-react";
+import { Baby, Calendar, Plus } from "lucide-react";
 import { toast } from "sonner";
 
-import { Card, CardContent, Skeleton, Separator } from "@/components/ui";
-import { HistoryChart, HistoryTable, LogButton } from "@/components";
+import { Button, Card, CardContent, Skeleton, Separator } from "@/components/ui";
+import { HistoryChart, HistoryTable } from "@/components";
 import type { KickEntry } from "@/hooks";
 import { startOfWeek } from "@/utils";
 import type { DailySummary, TimeRangeFilter } from "@/types";
@@ -178,16 +178,27 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <div className="rounded bg-pink-100 p-1.5">
-          <Baby className="h-4 w-4 text-pink-600" />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <div className="rounded bg-pink-100 p-1.5">
+            <Baby className="h-4 w-4 text-pink-600" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold">Kicks</h2>
+            <p className="text-xs text-gray-500">
+              Track daily kicks and spot your baby&apos;s patterns
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-semibold">Kicks</h2>
-          <p className="text-xs text-gray-500">
-            Track daily kicks and spot your baby&apos;s patterns
-          </p>
-        </div>
+        <Button
+          size="sm"
+          onClick={handleLogKickClick}
+          disabled={logging}
+          className="shrink-0 rounded-full bg-pink-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-pink-700"
+        >
+          <Plus className="h-4 w-4" />
+          Log Kick
+        </Button>
       </div>
 
       <Card className="shadow-md border-0">
@@ -290,11 +301,6 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
                   )}
                 </CardContent>
               </Card>
-            </div>
-
-            <div className="flex flex-col items-center gap-2 mt-2">
-              <LogButton onClick={handleLogKickClick} loading={logging} />
-              <p className="text-xs text-gray-500">Tap to log a kick</p>
             </div>
           </div>
 

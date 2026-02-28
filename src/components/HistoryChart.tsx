@@ -36,8 +36,8 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
 
   if (chartData.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center px-4 text-center text-sm text-gray-500">
-        Log 10+ kicks in a day to see your time-to-10 trend
+      <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-purple-100 bg-purple-50/40 px-4 text-center text-xs text-purple-700">
+        Log at least one day with 10+ kicks to see how long it usually takes to reach 10.
       </div>
     );
   }
@@ -50,38 +50,46 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
   };
 
   return (
-    <div className="h-64">
+    <div className="h-56 rounded-lg border border-purple-100 bg-white/60 px-2 py-2">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
+        <LineChart
+          data={chartData}
+          margin={{ top: 10, right: 8, bottom: 20, left: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis
             dataKey="date"
             tickFormatter={formatDate}
-            angle={-45}
+            tick={{ fontSize: 10 }}
+            interval="preserveEnd"
+            angle={-30}
             textAnchor="end"
-            height={60}
+            height={40}
           />
           <YAxis
+            width={40}
+            tick={{ fontSize: 10 }}
             tickFormatter={formatTime}
-            label={{
-              value: "Time to 10 kicks",
-              angle: -90,
-              position: "insideLeft",
-            }}
           />
           <Tooltip
+            contentStyle={{
+              borderRadius: 8,
+              borderColor: "#e5e7eb",
+              fontSize: 12,
+            }}
             labelFormatter={formatDate}
             formatter={(value: number) => [
-              formatTime(value),
+              formatTime(value as number),
               "Time to 10 kicks",
             ]}
           />
           <Line
             type="monotone"
             dataKey="timeInMinutes"
-            stroke="#a855f7"
-            strokeWidth={2}
-            dot={{ fill: "#a855f7", r: 4 }}
+            stroke="#ec4899"
+            strokeWidth={2.2}
+            dot={{ fill: "#ec4899", r: 3 }}
+            activeDot={{ r: 5, strokeWidth: 1, stroke: "#db2777" }}
           />
         </LineChart>
       </ResponsiveContainer>
