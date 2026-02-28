@@ -9,7 +9,7 @@ import {
 } from "recharts";
 
 import { formatDate } from "@/utils";
-import type { DailySummary } from "@/App";
+import type { DailySummary } from "@/types";
 
 export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
   if (data.length === 0) return null;

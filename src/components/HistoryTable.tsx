@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { DailySummary } from "@/App";
+import type { DailySummary } from "@/types";
 import {
   Table,
   TableBody,
