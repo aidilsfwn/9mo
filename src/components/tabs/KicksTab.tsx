@@ -1,13 +1,12 @@
 import { useMemo, useState } from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, Baby } from "lucide-react";
 import { toast } from "sonner";
 
 import { Card, CardContent, Skeleton, Separator } from "@/components/ui";
 import { HistoryChart, HistoryTable, LogButton } from "@/components";
 import type { KickEntry } from "@/hooks";
-import { calculateTimeInfo, startOfWeek } from "@/utils";
+import { startOfWeek } from "@/utils";
 import type { DailySummary, TimeRangeFilter } from "@/types";
-import { DUE_DATE } from "@/constants";
 
 interface KicksTabProps {
   kicks: KickEntry[];
@@ -145,7 +144,6 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
   const [timeRange, setTimeRange] = useState<TimeRangeFilter>("today");
 
   const todayDate = getTodayDate();
-  const { daysToGo, weeks, days } = calculateTimeInfo();
 
   const kicksToday = kicks.filter((k) => k.date === todayDate).length;
   const todayTimes = getTodayKickTimes(kicks);
@@ -180,34 +178,20 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5 items-center">
-        <h1 className="text-2xl font-bold text-center">
-          Hi <span className="text-[#ff78ae]">Farhana</span>,
-        </h1>
-        <p className="text-gray-600 text-sm text-center">
-          Feel those little kicks and track your patterns
-        </p>
+      <div className="flex items-center gap-2">
+        <div className="rounded bg-pink-100 p-1.5">
+          <Baby className="h-4 w-4 text-pink-600" />
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold">Kicks</h2>
+          <p className="text-xs text-gray-500">
+            Track daily kicks and spot your baby&apos;s patterns
+          </p>
+        </div>
       </div>
 
       <Card className="shadow-md border-0">
         <CardContent>
-          <div className="flex flex-col justify-center gap-2">
-            <div className="font-semibold text-gray-700 text-sm">
-              Baby's Due Date:{" "}
-              {DUE_DATE.toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}{" "}
-              (<span className="text-pink-600">{daysToGo}</span> days to go)
-            </div>
-            <div className="font-semibold text-gray-700 text-sm">
-              Fetal Age: {weeks} weeks{days > 0 ? `, ${days} days` : ""}
-            </div>
-          </div>
-
-          <Separator className="my-6" />
-
           <div className="flex flex-col gap-4">
             <div className="flex flex-row justify-center gap-2 mb-2">
               <div className="p-1.5 bg-purple-100 rounded">

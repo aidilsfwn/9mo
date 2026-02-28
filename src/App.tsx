@@ -14,7 +14,7 @@ import { SummaryTab } from "@/components/tabs/SummaryTab";
 import logo from "./assets/logo.svg";
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>("kicks");
+  const [activeTab, setActiveTab] = useState<TabKey>("summary");
   const [logLoading, setLogLoading] = useState<boolean>(false);
   const [contractions, setContractions] = useState<Contraction[]>([]);
 
@@ -115,34 +115,29 @@ const App = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-linear-to-br from-pink-50 via-purple-50 to-blue-50">
-      <div className="flex flex-1 justify-center pb-24">
-        <div className="w-full max-w-md space-y-4">
-          <header className="flex flex-col bg-white px-6 py-4 shadow-sm">
-            <div className="flex flex-row items-center gap-4">
-              <img
-                src={logo}
-                alt="Nana's Pregnancy Tracker logo"
-                className="h-16 w-16"
-              />
-              <div className="flex flex-col gap-1">
-                <span className="text-xl font-semibold">
-                  Nana&apos;s Pregnancy Tracker
-                </span>
-                <div className="flex flex-row items-center gap-2">
-                  <span className="text-sm italic text-neutral-400">
-                    Built with love, by yours truly
-                  </span>
-                  <Heart
-                    fill="#ff78ae"
-                    className="h-4 w-4 text-[#ff78ae]"
-                  />
-                </div>
-              </div>
-            </div>
-          </header>
-          <main className="px-6 pb-6 pt-4">{renderContent()}</main>
+      <header className="fixed top-0 left-0 right-0 z-20 border-b border-pink-100/50 bg-white/95 shadow-sm backdrop-blur-md">
+        <div className="mx-auto flex max-w-md items-center gap-3 px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-3">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-pink-100 to-purple-100 shadow-sm">
+            <img
+              src={logo}
+              alt=""
+              className="h-9 w-9"
+            />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-base font-semibold tracking-tight text-gray-900">
+              Nana&apos;s Pregnancy Tracker
+            </h1>
+            <p className="flex items-center gap-1.5 truncate text-xs text-neutral-500">
+              <Heart fill="#ff78ae" className="h-3 w-3 shrink-0 text-[#ff78ae]" />
+              <span className="italic">Built with love, by yours truly</span>
+            </p>
+          </div>
         </div>
-      </div>
+      </header>
+      <main className="flex flex-1 justify-center px-5 pb-24 pt-[calc(5rem+1.25rem+env(safe-area-inset-top,0px))]">
+        <div className="w-full max-w-md">{renderContent()}</div>
+      </main>
       <BottomNav activeTab={activeTab} onChange={setActiveTab} />
       <Toaster position="top-center" />
     </div>

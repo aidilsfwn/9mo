@@ -7,10 +7,10 @@ interface BottomNavProps {
 }
 
 const tabs: { key: TabKey; label: string; Icon: React.ComponentType<any> }[] = [
+  { key: "summary", label: "Summary", Icon: ChartLine },
   { key: "kicks", label: "Kicks", Icon: Baby },
   { key: "weight", label: "Weight", Icon: Scale },
   { key: "contractions", label: "Contractions", Icon: Timer },
-  { key: "summary", label: "Summary", Icon: ChartLine },
 ];
 
 export const BottomNav = ({ activeTab, onChange }: BottomNavProps) => {
