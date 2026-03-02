@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "apple-touch-icon.png"],
       manifest: {
-        name: "Nana's Kick Tracker",
-        short_name: "NanaKickTracker",
-        description: "Track and visualize baby kicks during pregnancy 💕",
+        name: "9mo.",
+        short_name: "9mo.",
+        description: "A pregnancy tracker made with love for Nana.",
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",

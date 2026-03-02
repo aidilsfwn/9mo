@@ -7,9 +7,10 @@ import {
   Tooltip,
   Line,
 } from "recharts";
+import { ChartLine } from "lucide-react";
 
 import { formatDate } from "@/utils";
-import type { DailySummary } from "@/App";
+import type { DailySummary } from "@/types";
 
 export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
   if (data.length === 0) return null;
@@ -36,8 +37,9 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
 
   if (chartData.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-500">
-        Not enough data to display chart (need at least one day with 10+ kicks)
+      <div className="flex h-48 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-purple-100 bg-purple-50/40 px-4 text-center">
+        <ChartLine className="h-7 w-7 text-purple-200" />
+        <p className="text-xs text-purple-500">Hit 10 kicks in a day and you&apos;ll see how long it took charted here.</p>
       </div>
     );
   }
@@ -50,38 +52,46 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
   };
 
   return (
-    <div className="h-64">
+    <div className="h-56 rounded-lg border border-purple-100 bg-white/60 px-2 py-2">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
+        <LineChart
+          data={chartData}
+          margin={{ top: 10, right: 8, bottom: 20, left: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis
             dataKey="date"
             tickFormatter={formatDate}
-            angle={-45}
+            tick={{ fontSize: 11 }}
+            interval="preserveEnd"
+            angle={-30}
             textAnchor="end"
-            height={60}
+            height={40}
           />
           <YAxis
+            width={40}
+            tick={{ fontSize: 11 }}
             tickFormatter={formatTime}
-            label={{
-              value: "Time to 10 kicks",
-              angle: -90,
-              position: "insideLeft",
-            }}
           />
           <Tooltip
+            contentStyle={{
+              borderRadius: 8,
+              borderColor: "#e5e7eb",
+              fontSize: 12,
+            }}
             labelFormatter={formatDate}
             formatter={(value: number) => [
-              formatTime(value),
+              formatTime(value as number),
               "Time to 10 kicks",
             ]}
           />
           <Line
             type="monotone"
             dataKey="timeInMinutes"
-            stroke="#a855f7"
-            strokeWidth={2}
-            dot={{ fill: "#a855f7", r: 4 }}
+            stroke="#ec4899"
+            strokeWidth={2.2}
+            dot={{ fill: "#ec4899", r: 3 }}
+            activeDot={{ r: 5, strokeWidth: 1, stroke: "#db2777" }}
           />
         </LineChart>
       </ResponsiveContainer>
