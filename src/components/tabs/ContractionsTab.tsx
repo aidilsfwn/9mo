@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, HeartPulse, TimerReset } from "lucide-react";
+import { AlertCircle, AlertTriangle, CheckCircle2, HeartPulse, TimerReset } from "lucide-react";
 import { toast } from "sonner";
 
 import { Card, CardContent, Button, Separator } from "@/components/ui";
@@ -11,7 +11,7 @@ interface ContractionsTabProps {
 }
 
 const formatSeconds = (seconds: number | undefined) => {
-  if (!seconds && seconds !== 0) return "-";
+  if (!seconds && seconds !== 0) return "—";
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   if (mins === 0) return `${secs}s`;
@@ -192,7 +192,7 @@ export const ContractionsTab = ({
     ? contractions.find((c) => c.id === activeId)
     : undefined;
 
-  const formattedElapsed = formatSeconds(elapsed);
+  const formattedElapsed = activeId ? formatSeconds(elapsed) : "00:00";
 
   const list = [...contractions]
     .filter((c) => c.endTime)
@@ -211,7 +211,7 @@ export const ContractionsTab = ({
         <div>
           <h2 className="text-lg font-semibold">Contraction Timer</h2>
           <p className="text-xs text-gray-500">
-            Track duration and spacing to follow the 5-1-1 rule.
+            Time contractions and follow the 5-1-1 rule when things pick up.
           </p>
         </div>
       </div>
@@ -222,54 +222,63 @@ export const ContractionsTab = ({
             <div className="text-xs font-medium uppercase tracking-wide text-gray-500">
               {active ? "Timing..." : "Tap when a contraction starts"}
             </div>
-            <div className="text-4xl font-mono font-semibold text-purple-700">
-              {formattedElapsed}
+            <div className="relative flex items-center justify-center">
+              {activeId && (
+                <span
+                  className={`absolute h-24 w-24 rounded-full animate-ping opacity-20 ${
+                    elapsed >= 90 ? "bg-red-400" : "bg-green-400"
+                  }`}
+                />
+              )}
+              <div
+                className={`text-4xl font-mono font-semibold transition-colors duration-500 ${
+                  !activeId
+                    ? "text-gray-400"
+                    : elapsed >= 90
+                    ? "text-red-600"
+                    : "text-green-600"
+                }`}
+              >
+                {formattedElapsed}
+              </div>
             </div>
-            <Button
-              size="lg"
-              className={`mt-2 w-48 rounded-full text-base font-semibold ${
-                active
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
-              onClick={handleStartStop}
-            >
-              {active ? "Stop Contraction" : "Start Contraction"}
-            </Button>
           </div>
+
+          <Button
+            className={`w-full rounded-2xl py-6 text-base font-semibold text-white shadow-md active:scale-[0.98] transition-transform ${
+              active
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-green-500 hover:bg-green-600"
+            }`}
+            onClick={handleStartStop}
+          >
+            {active ? "Stop Contraction" : "Start Contraction"}
+          </Button>
 
           <Separator />
 
-          <div className="grid grid-cols-2 gap-3 text-center text-xs">
-            <div className="rounded-lg bg-purple-50 px-2 py-3">
-              <div className="mb-1 text-[11px] font-medium text-purple-600">
-                Last Duration
-              </div>
-              <div className="text-sm font-semibold">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Last Duration</div>
+              <div className="text-xl font-bold text-purple-600">
                 {formatSeconds(stats.lastDuration)}
               </div>
             </div>
-            <div className="rounded-lg bg-purple-50 px-2 py-3">
-              <div className="mb-1 text-[11px] font-medium text-purple-600">
-                Last Interval
-              </div>
-              <div className="text-sm font-semibold">
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Last Interval</div>
+              <div className="text-xl font-bold text-purple-600">
                 {formatSeconds(stats.lastInterval)}
               </div>
             </div>
-            <div className="rounded-lg bg-blue-50 px-2 py-3">
-              <div className="mb-1 text-[11px] font-medium text-blue-600">
-                Avg Duration
-              </div>
-              <div className="text-sm font-semibold">
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Avg Duration</div>
+              <div className="text-xl font-bold text-purple-600">
                 {formatSeconds(stats.avgDuration)}
               </div>
             </div>
-            <div className="rounded-lg bg-blue-50 px-2 py-3">
-              <div className="mb-1 text-[11px] font-medium text-blue-600">
-                Avg Interval
-              </div>
-              <div className="text-sm font-semibold">
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Avg Interval</div>
+              <div className="text-xl font-bold text-purple-600">
                 {formatSeconds(stats.avgInterval)}
               </div>
             </div>
@@ -284,10 +293,16 @@ export const ContractionsTab = ({
                   : "border-emerald-300 bg-emerald-50 text-emerald-700"
             }`}
           >
-            <AlertTriangle className="mt-0.5 h-4 w-4" />
+            {guidance.level === "red" ? (
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          ) : guidance.level === "yellow" ? (
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          ) : (
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+          )}
             <div>
               <div className="text-xs font-semibold">{guidance.title}</div>
-              <p className="text-[11px] leading-snug">{guidance.message}</p>
+              <p className="text-xs leading-snug">{guidance.message}</p>
             </div>
           </div>
 
@@ -307,9 +322,10 @@ export const ContractionsTab = ({
 
           <div className="max-h-64 space-y-2 overflow-y-auto rounded-lg border bg-white px-3 py-2">
             {list.length === 0 ? (
-            <div className="py-6 text-center text-xs text-gray-500">
-              Tap Start when a contraction begins
-            </div>
+              <div className="flex flex-col items-center gap-2 py-6 text-center">
+                <HeartPulse className="h-7 w-7 text-red-200" />
+                <p className="text-xs text-gray-400">Tap Start when a contraction begins — they&apos;ll show up here</p>
+              </div>
             ) : (
               list.map((c) => (
                 <div
@@ -321,7 +337,7 @@ export const ContractionsTab = ({
                       Started at {formatTime(c.startTime)}
                     </span>
                     {c.endTime && (
-                      <span className="text-[11px] text-gray-500">
+                      <span className="text-xs text-gray-500">
                         Ended at {formatTime(c.endTime)}
                       </span>
                     )}
@@ -330,7 +346,7 @@ export const ContractionsTab = ({
                     <div className="font-semibold">
                       {formatSeconds(c.duration)}
                     </div>
-                    <div className="text-[11px] text-gray-500">
+                    <div className="text-xs text-gray-500">
                       Interval: {formatSeconds(c.interval)}
                     </div>
                   </div>

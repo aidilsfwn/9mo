@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Calendar, TrendingUp } from "lucide-react";
+import { Scale, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import {
   CartesianGrid,
@@ -11,7 +11,19 @@ import {
   YAxis,
 } from "recharts";
 
-import { Card, CardContent, Button, Separator, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui";
+import {
+  Card,
+  CardContent,
+  Button,
+  Input,
+  Separator,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui";
 import type { WeightEntry } from "@/types";
 import { formatDate } from "@/utils";
 
@@ -23,7 +35,7 @@ interface WeightTabProps {
 }
 
 const formatKg = (value: number | null | undefined) =>
-  value == null ? "-" : `${value.toFixed(1)} kg`;
+  value == null ? "—" : `${value.toFixed(1)} kg`;
 
 const getStats = (weights: WeightEntry[]) => {
   if (weights.length === 0) {
@@ -151,7 +163,7 @@ export const WeightTab = ({
         <div>
           <h2 className="text-lg font-semibold">Weight Tracker</h2>
           <p className="text-xs text-gray-500">
-            Watch your progress as baby grows
+            Log your weight as baby grows
           </p>
         </div>
       </div>
@@ -164,32 +176,29 @@ export const WeightTab = ({
                 <label className="text-xs font-medium text-gray-600">
                   Weight (kg)
                 </label>
-                <input
+                <Input
                   type="number"
                   step="0.1"
                   min="0"
                   value={weightInput}
                   onChange={(e) => setWeightInput(e.target.value)}
-                  className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-pink-400 focus:outline-none focus:ring-1 focus:ring-pink-300"
                   placeholder="e.g. 65.5"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-gray-600 flex items-center gap-1">
-                  <Calendar className="h-3 w-3 text-purple-500" />
+                <label className="text-xs font-medium text-gray-600">
                   Date
                 </label>
-                <input
+                <Input
                   type="date"
                   value={dateInput}
                   onChange={(e) => setDateInput(e.target.value)}
-                  className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm shadow-sm focus:border-pink-400 focus:outline-none focus:ring-1 focus:ring-pink-300"
                 />
               </div>
             </div>
             <Button
               type="submit"
-              className="w-full"
+              className="w-full rounded-xl bg-pink-600 font-semibold text-white hover:bg-pink-700 active:scale-[0.98] transition-transform"
               disabled={submitting || loading}
             >
               Log Weight
@@ -198,93 +207,93 @@ export const WeightTab = ({
 
           <Separator />
 
-          <div className="grid grid-cols-3 gap-3">
-            <Card className="shadow-sm border-0">
-              <CardContent className="flex flex-col items-center py-3">
-                <div className="text-xs font-medium text-gray-500 mb-1">
-                  Current Weight
-                </div>
-                <div className="text-base font-semibold text-purple-700">
-                  {formatKg(stats.currentWeight)}
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="shadow-sm border-0">
-              <CardContent className="flex flex-col items-center py-3">
-                <div className="text-xs font-medium text-gray-500 mb-1">
-                  Total Gained
-                </div>
-                <div
-                  className={`text-base font-semibold ${
-                    stats.totalGained != null && stats.totalGained >= 0
-                      ? "text-green-600"
-                      : "text-red-500"
-                  }`}
-                >
-                  {stats.totalGained == null
-                    ? "-"
-                    : `${stats.totalGained >= 0 ? "+" : ""}${stats.totalGained.toFixed(1)} kg`}
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="shadow-sm border-0">
-              <CardContent className="flex flex-col items-center py-3">
-                <div className="text-xs font-medium text-gray-500 mb-1">
-                  Week
-                </div>
-                <div className="text-base font-semibold text-blue-600">
-                  {stats.currentWeek != null ? `W${stats.currentWeek}` : "-"}
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Current</div>
+              <div className="text-xl font-bold text-purple-600 text-center">
+                {formatKg(stats.currentWeight)}
+              </div>
+            </div>
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Gained</div>
+              <div
+                className={`text-xl font-bold text-center ${
+                  stats.totalGained != null && stats.totalGained < 0
+                    ? "text-red-500"
+                    : "text-purple-600"
+                }`}
+              >
+                {stats.totalGained == null
+                  ? "—"
+                  : `${stats.totalGained >= 0 ? "+" : ""}${stats.totalGained.toFixed(1)}`}
+              </div>
+            </div>
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Week</div>
+              <div className="text-xl font-bold text-purple-600 text-center">
+                {stats.currentWeek != null ? `W${stats.currentWeek}` : "—"}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Weight Trend</span>
-              <span className="text-xs text-gray-500">
-                Recent: {trend}
-              </span>
+              <span className="text-xs text-gray-500">Recent: {trend}</span>
             </div>
             <div className="h-56 rounded-lg border border-purple-100 bg-purple-50/40 p-2">
               {chartData.length === 0 ? (
-                <div className="flex h-full items-center justify-center px-4 text-center text-xs text-gray-500">
-                  Add a few entries to see your progress
+                <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
+                  <Scale className="h-7 w-7 text-purple-200" />
+                  <p className="text-xs text-gray-400">
+                    Add a few entries to see your progress
+                  </p>
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                  <LineChart
+                    data={chartData}
+                    margin={{ top: 8, right: 8, bottom: 8, left: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e9d5ff" />
                     <XAxis
                       dataKey="week"
                       tickLine={false}
-                      tickMargin={8}
-                      label={{
-                        value: "Pregnancy Week",
-                        position: "insideBottom",
-                        offset: -4,
-                      }}
+                      tickMargin={6}
+                      tick={{ fontSize: 11 }}
+                      tickFormatter={(v: number) => `W${v}`}
                     />
                     <YAxis
                       tickLine={false}
-                      tickMargin={8}
-                      width={40}
-                      label={{
-                        value: "kg",
-                        angle: -90,
-                        position: "insideLeft",
-                      }}
+                      tickMargin={4}
+                      width={44}
+                      tick={{ fontSize: 11 }}
+                      tickFormatter={(v: number) => `${v}kg`}
                     />
                     <Tooltip
-                      formatter={(value: number) => [`${value.toFixed(1)} kg`, "Weight"]}
+                      formatter={(value: number) => [
+                        `${value.toFixed(1)} kg`,
+                        "Weight",
+                      ]}
                       labelFormatter={(value: number) => `Week ${value}`}
+                      contentStyle={{
+                        borderRadius: 8,
+                        borderColor: "#e9d5ff",
+                        fontSize: 12,
+                      }}
                     />
                     <Line
                       type="monotone"
                       dataKey="weight"
                       stroke="#ec4899"
                       strokeWidth={2}
-                      dot={{ r: 3, strokeWidth: 1, stroke: "#db2777", fill: "#f9a8d4" }}
+                      dot={{
+                        r: 3,
+                        strokeWidth: 1,
+                        stroke: "#db2777",
+                        fill: "#f9a8d4",
+                      }}
+                      activeDot={{ r: 5, strokeWidth: 1, stroke: "#db2777" }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -323,19 +332,19 @@ export const WeightTab = ({
                 <TableBody>
                   {paginated.rows.length === 0 ? (
                     <TableRow>
-                      <TableCell
-                        colSpan={5}
-                        className="py-6 text-center text-sm text-gray-500"
-                      >
-                        No entries yet. Log your first weight above.
+                      <TableCell colSpan={5} className="py-8">
+                        <div className="flex flex-col items-center gap-2 text-center">
+                          <Scale className="h-7 w-7 text-purple-200" />
+                          <p className="text-xs text-gray-400">
+                            No entries yet. Log your first weight above.
+                          </p>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ) : (
                     paginated.rows.map((entry, index) => {
                       const prev =
-                        index === 0
-                          ? undefined
-                          : paginated.rows[index - 1];
+                        index === 0 ? undefined : paginated.rows[index - 1];
                       const delta =
                         prev != null ? entry.weight - prev.weight : null;
                       return (
@@ -348,7 +357,7 @@ export const WeightTab = ({
                           </TableCell>
                           <TableCell className="text-xs">
                             {delta == null
-                              ? "-"
+                              ? "—"
                               : `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} kg`}
                           </TableCell>
                           <TableCell className="text-xs">
@@ -387,9 +396,7 @@ export const WeightTab = ({
                     className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-700 disabled:opacity-50"
                     disabled={paginated.currentPage === paginated.totalPages}
                     onClick={() =>
-                      setPage((p) =>
-                        Math.min(paginated.totalPages, p + 1),
-                      )
+                      setPage((p) => Math.min(paginated.totalPages, p + 1))
                     }
                   >
                     Next
@@ -403,4 +410,3 @@ export const WeightTab = ({
     </div>
   );
 };
-

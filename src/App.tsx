@@ -113,9 +113,16 @@ const App = () => {
     }
   };
 
+  const headerAccent: Record<TabKey, string> = {
+    summary: "border-purple-200/80",
+    kicks: "border-pink-200/80",
+    weight: "border-purple-200/80",
+    contractions: "border-red-200/80",
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-linear-to-br from-pink-50 via-purple-50 to-blue-50">
-      <header className="fixed top-0 left-0 right-0 z-20 border-b border-pink-100/50 bg-white/95 shadow-sm backdrop-blur-md">
+      <header className={`fixed top-0 left-0 right-0 z-20 border-b ${headerAccent[activeTab]} bg-white/95 shadow-sm backdrop-blur-md transition-colors duration-300`}>
         <div className="mx-auto flex max-w-md items-center gap-3 px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))] pb-3">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-pink-100 to-purple-100 shadow-sm">
             <img
@@ -126,11 +133,11 @@ const App = () => {
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-base font-semibold tracking-tight text-gray-900">
-              Nana&apos;s Pregnancy Tracker
+              9mo.
             </h1>
             <p className="flex items-center gap-1.5 truncate text-xs text-neutral-500">
               <Heart fill="#ff78ae" className="h-3 w-3 shrink-0 text-[#ff78ae]" />
-              <span className="italic">Built with love, by yours truly</span>
+              <span className="italic">For Nana, with all my love</span>
             </p>
           </div>
         </div>

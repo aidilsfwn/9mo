@@ -7,6 +7,7 @@ import {
   Tooltip,
   Line,
 } from "recharts";
+import { ChartLine } from "lucide-react";
 
 import { formatDate } from "@/utils";
 import type { DailySummary } from "@/types";
@@ -36,8 +37,9 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
 
   if (chartData.length === 0) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-lg border border-dashed border-purple-100 bg-purple-50/40 px-4 text-center text-xs text-purple-700">
-        Log at least one day with 10+ kicks to see how long it usually takes to reach 10.
+      <div className="flex h-48 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-purple-100 bg-purple-50/40 px-4 text-center">
+        <ChartLine className="h-7 w-7 text-purple-200" />
+        <p className="text-xs text-purple-500">Hit 10 kicks in a day and you&apos;ll see how long it took charted here.</p>
       </div>
     );
   }
@@ -60,7 +62,7 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
           <XAxis
             dataKey="date"
             tickFormatter={formatDate}
-            tick={{ fontSize: 10 }}
+            tick={{ fontSize: 11 }}
             interval="preserveEnd"
             angle={-30}
             textAnchor="end"
@@ -68,7 +70,7 @@ export const HistoryChart = ({ data }: { data: DailySummary[] }) => {
           />
           <YAxis
             width={40}
-            tick={{ fontSize: 10 }}
+            tick={{ fontSize: 11 }}
             tickFormatter={formatTime}
           />
           <Tooltip

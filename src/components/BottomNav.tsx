@@ -10,7 +10,7 @@ const tabs: { key: TabKey; label: string; Icon: React.ComponentType<any> }[] = [
   { key: "summary", label: "Summary", Icon: ChartLine },
   { key: "kicks", label: "Kicks", Icon: Baby },
   { key: "weight", label: "Weight", Icon: Scale },
-  { key: "contractions", label: "Contractions", Icon: Timer },
+  { key: "contractions", label: "Timer", Icon: Timer },
 ];
 
 export const BottomNav = ({ activeTab, onChange }: BottomNavProps) => {
@@ -24,17 +24,16 @@ export const BottomNav = ({ activeTab, onChange }: BottomNavProps) => {
               key={key}
               type="button"
               onClick={() => onChange(key)}
-              className={`flex flex-1 flex-col items-center gap-0.5 rounded-full px-2 py-1 text-xs font-medium transition ${
+              className={`relative flex flex-1 flex-col items-center gap-0.5 rounded-xl px-2 py-1 text-xs font-medium transition ${
                 isActive
-                  ? "bg-pink-100 text-pink-600"
-                  : "text-gray-500 hover:bg-gray-100"
+                  ? "text-pink-600"
+                  : "text-gray-400 hover:text-gray-600"
               }`}
             >
-              <Icon
-                className={`h-5 w-5 ${
-                  isActive ? "text-pink-600" : "text-gray-500"
-                }`}
-              />
+              {isActive && (
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full bg-pink-500" />
+              )}
+              <Icon className="h-5 w-5" />
               <span>{label}</span>
             </button>
           );

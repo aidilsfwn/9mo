@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Baby, Calendar, Plus } from "lucide-react";
+import { Baby, BarChart2, Calendar, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button, Card, CardContent, Skeleton, Separator } from "@/components/ui";
@@ -178,133 +178,94 @@ export const KicksTab = ({ kicks, logging, onLogKick }: KicksTabProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <div className="rounded bg-pink-100 p-1.5">
-            <Baby className="h-4 w-4 text-pink-600" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold">Kicks</h2>
-            <p className="text-xs text-gray-500">
-              Track daily kicks and spot your baby&apos;s patterns
-            </p>
-          </div>
+      <div className="flex items-center gap-2">
+        <div className="rounded bg-pink-100 p-1.5">
+          <Baby className="h-4 w-4 text-pink-600" />
         </div>
-        <Button
-          size="sm"
-          onClick={handleLogKickClick}
-          disabled={logging}
-          className="shrink-0 rounded-full bg-pink-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-pink-700"
-        >
-          <Plus className="h-4 w-4" />
-          Log Kick
-        </Button>
+        <div>
+          <h2 className="text-lg font-semibold">Kicks</h2>
+          <p className="text-xs text-gray-500">
+            Count baby&apos;s kicks and discover their daily rhythm
+          </p>
+        </div>
       </div>
 
+      <Button
+        size="lg"
+        onClick={handleLogKickClick}
+        disabled={logging}
+        className="w-full rounded-2xl bg-pink-600 py-6 text-base font-semibold text-white shadow-md hover:bg-pink-700 active:scale-[0.98] transition-transform"
+      >
+        <Plus className="h-5 w-5" />
+        Log Kick
+      </Button>
+
       <Card className="shadow-md border-0">
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-row justify-center gap-2 mb-2">
-              <div className="p-1.5 bg-purple-100 rounded">
-                <Calendar className="w-3 h-3 text-purple-600" />
-              </div>
-              <div className="font-semibold">Today's Stats</div>
+        <CardContent className="space-y-4 pt-4">
+          <div className="flex items-center gap-2">
+            <div className="rounded bg-pink-100 p-1.5">
+              <Calendar className="h-4 w-4 text-pink-600" />
+            </div>
+            <div className="text-sm font-semibold">Today</div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <div className="rounded-xl bg-pink-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-pink-400">Kicks</div>
+              {logging ? (
+                <Skeleton className="h-7 w-10 rounded" />
+              ) : (
+                <div className="text-2xl font-bold text-pink-600">{kicksToday}</div>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-              <Card className="shadow-sm border-0">
-                <CardContent className="flex flex-col items-center py-4">
-                  <div className="text-xs font-medium text-gray-500 mb-1">
-                    Kicks Today
-                  </div>
-                  {logging ? (
-                    <Skeleton className="h-8 w-10 rounded self-center" />
-                  ) : (
-                    <div className="text-3xl font-bold text-purple-600">
-                      {kicksToday}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+            <div className="rounded-xl bg-pink-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-pink-400">1st Kick</div>
+              {logging ? (
+                <Skeleton className="h-6 w-16 rounded" />
+              ) : (
+                <div className="text-xl font-bold text-pink-600 text-center">{todayTimes.firstKick || "—"}</div>
+              )}
+            </div>
 
-              <Card className="shadow-sm border-0">
-                <CardContent className="flex flex-col items-center py-4">
-                  <div className="text-xs font-medium text-gray-500 mb-1">
-                    Time to 10
-                  </div>
-                  {logging ? (
-                    <Skeleton className="h-8 w-10 rounded self-center" />
-                  ) : (
-                    <div className="text-2xl font-bold text-blue-600 text-center">
-                      {todayTimes.timeTo10 || "-"}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-sm border-0">
-                <CardContent className="flex flex-col items-center py-4">
-                  <div className="text-xs font-medium text-gray-500 mb-1">
-                    Peak Hour
-                  </div>
-                  {logging ? (
-                    <Skeleton className="h-8 w-16 rounded self-center" />
-                  ) : (
-                    <div className="text-sm font-semibold text-green-600 text-center">
-                      {mostActiveHour || "-"}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-sm border-0">
-                <CardContent className="flex flex-col items-center py-4">
-                  <div className="text-xs font-medium text-gray-500 mb-1">
-                    Daily Average
-                  </div>
-                  {logging ? (
-                    <Skeleton className="h-8 w-16 rounded self-center" />
-                  ) : (
-                    <div className="text-2xl font-semibold text-orange-600 text-center">
-                      {avgDailyKicks.toFixed(1)}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-sm border-0">
-                <CardContent className="flex flex-col items-center py-4">
-                  <div className="text-xs font-medium text-gray-500 mb-1">
-                    1st Kick
-                  </div>
-                  {logging ? (
-                    <Skeleton className="h-8 w-16 rounded self-center" />
-                  ) : (
-                    <div className="text-xl font-semibold text-green-600 text-center">
-                      {todayTimes.firstKick || "-"}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="shadow-sm border-0">
-                <CardContent className="flex flex-col items-center py-4">
-                  <div className="text-xs font-medium text-gray-500 mb-1">
-                    10th Kick
-                  </div>
-                  {logging ? (
-                    <Skeleton className="h-8 w-16 rounded self-center" />
-                  ) : (
-                    <div className="text-xl font-semibold text-orange-600 text-center">
-                      {todayTimes.tenthKick || "-"}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+            <div className="rounded-xl bg-pink-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-pink-400">Time to 10</div>
+              {logging ? (
+                <Skeleton className="h-7 w-10 rounded" />
+              ) : (
+                <div className="text-xl font-bold text-pink-600 text-center">{todayTimes.timeTo10 || "—"}</div>
+              )}
             </div>
           </div>
 
-          <Separator className="my-6" />
+          <div className="flex items-center gap-2">
+            <div className="rounded bg-purple-100 p-1.5">
+              <BarChart2 className="h-4 w-4 text-purple-600" />
+            </div>
+            <div className="text-sm font-semibold">Overall</div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Daily Avg</div>
+              {logging ? (
+                <Skeleton className="h-7 w-16 rounded" />
+              ) : (
+                <div className="text-xl font-bold text-purple-600 text-center">{avgDailyKicks.toFixed(1)}</div>
+              )}
+            </div>
+
+            <div className="rounded-xl bg-purple-50/80 p-3 flex flex-col items-center gap-1">
+              <div className="text-xs font-medium text-purple-400">Peak Hour</div>
+              {logging ? (
+                <Skeleton className="h-6 w-16 rounded" />
+              ) : (
+                <div className="text-xl font-bold text-purple-600 text-center">{mostActiveHour || "—"}</div>
+              )}
+            </div>
+          </div>
+
+          <Separator />
 
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
