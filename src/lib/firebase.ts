@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCYx7KirX52EuzxIEI7z4JsG-rkPeblEjM",
-  authDomain: "nana-kick-tracker.firebaseapp.com",
-  projectId: "nana-kick-tracker",
-  storageBucket: "nana-kick-tracker.firebasestorage.app",
-  messagingSenderId: "802858568941",
-  appId: "1:802858568941:web:e378fbf344cda6af6fd0e4",
-  measurementId: "G-ECYQ9TNSMW",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

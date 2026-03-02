@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Scale, TrendingUp } from "lucide-react";
+import { Check, Scale, Trash2, TrendingUp, X } from "lucide-react";
 import { toast } from "sonner";
 import {
   CartesianGrid,
@@ -90,6 +90,7 @@ export const WeightTab = ({
     new Date().toISOString().split("T")[0],
   );
   const [submitting, setSubmitting] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const pageSize = 7;
 
@@ -138,7 +139,8 @@ export const WeightTab = ({
       await onAddWeight(parsed, dateInput);
       toast.success("Weight logged!");
       setWeightInput("");
-    } catch {
+    } catch (error) {
+      console.error("Failed to log weight:", error);
       toast.error("Couldn't log weight. Try again?");
     } finally {
       setSubmitting(false);
@@ -148,6 +150,7 @@ export const WeightTab = ({
   const handleRemove = async (id: string) => {
     try {
       await onRemoveWeight(id);
+      setConfirmDeleteId(null);
       toast.success("Entry removed");
     } catch {
       toast.error("Couldn't remove entry");
@@ -364,13 +367,33 @@ export const WeightTab = ({
                             W{entry.weekNumber}
                           </TableCell>
                           <TableCell className="text-right">
-                            <button
-                              type="button"
-                              onClick={() => handleRemove(entry.id)}
-                              className="text-xs font-medium text-red-500 hover:text-red-600"
-                            >
-                              Remove
-                            </button>
+                            {confirmDeleteId === entry.id ? (
+                              <div className="flex items-center justify-end gap-1">
+                                <Button
+                                  size="icon-sm"
+                                  variant="destructive"
+                                  onClick={() => handleRemove(entry.id)}
+                                >
+                                  <Check className="h-3.5 w-3.5" />
+                                </Button>
+                                <Button
+                                  size="icon-sm"
+                                  variant="ghost"
+                                  onClick={() => setConfirmDeleteId(null)}
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            ) : (
+                              <Button
+                                size="icon-sm"
+                                variant="ghost"
+                                onClick={() => setConfirmDeleteId(entry.id)}
+                                className="text-gray-400 hover:bg-red-50 hover:text-red-500"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       );
@@ -380,27 +403,29 @@ export const WeightTab = ({
               </Table>
               {paginated.totalPages > 1 && (
                 <div className="flex items-center justify-between border-t bg-white px-3 py-1.5">
-                  <button
-                    type="button"
-                    className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-700 disabled:opacity-50"
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-purple-700 hover:bg-purple-100 hover:text-purple-700"
                     disabled={paginated.currentPage === 1}
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                   >
                     Previous
-                  </button>
+                  </Button>
                   <span className="text-xs text-gray-600">
                     Page {paginated.currentPage} of {paginated.totalPages}
                   </span>
-                  <button
-                    type="button"
-                    className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-700 disabled:opacity-50"
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-purple-700 hover:bg-purple-100 hover:text-purple-700"
                     disabled={paginated.currentPage === paginated.totalPages}
                     onClick={() =>
                       setPage((p) => Math.min(paginated.totalPages, p + 1))
                     }
                   >
                     Next
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
