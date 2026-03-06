@@ -99,10 +99,12 @@ export const WeightTab = ({
 
   const chartData = useMemo(
     () =>
-      [...weights].map((entry) => ({
-        week: entry.weekNumber,
-        weight: entry.weight,
-      })),
+      [...weights]
+        .sort((a, b) => a.weekNumber - b.weekNumber)
+        .map((entry) => ({
+          week: entry.weekNumber,
+          weight: entry.weight,
+        })),
     [weights],
   );
 
